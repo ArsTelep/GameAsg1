@@ -18,13 +18,28 @@ def dijkstras_shortest_path(initial_position, destination, graph, adj):
 
     """
     # pass
-    queue = [(0,start)]
+    queue = [(0,initial_position)]
     while queue:
         current_cost, current_node = best(queue)
         if current_node == destination:
-            return path_to(destination,graph)
+            return path_to(destination,graph) # What is path_to?
         else:
             # generate successors
+            # for cost,node in adj(current_node,graph):
+            #     pathcost = cost + current_node.pathcost
+            pathcost = cost + current_node.pathcost
+            if current_node == None:
+                current_node.pathcost = 0
+
+            # if node is new, set pathcost, backpointer and insert in queue at pathcost
+            # else if pathcost is cheaper, update pathcost, backpointer, and requeue 
+            return 0
+        # return(Failure)				# can’t get there from here
+        
+
+
+
+
             
 
 
@@ -39,8 +54,7 @@ def dijkstras_shortest_path_to_all(initial_position, graph, adj):
     Returns:
         A dictionary, mapping destination cells to the cost of a path from the initial_position.
     """
-    # pass
-    return 0
+    pass
 
     
 
@@ -62,8 +76,7 @@ def navigation_edges(level, cell):
              ((1,1), 1.4142135623730951),
              ... ]
     """
-    # pass
-    return 0;
+    pass
 
 def test_route(filename, src_waypoint, dst_waypoint):
     """ Loads a level, searches for a path between the given waypoints, and displays the result.
