@@ -5,38 +5,29 @@ from heapq import heappop, heappush
 
 def dijkstras_shortest_path(initial_position, destination, graph, adj):
     """ Searches for a minimal cost path through a graph using Dijkstra's algorithm.
-
     Args:
         initial_position: The initial cell from which the path extends.
         destination: The end location for the path.
         graph: A loaded level, containing walls, spaces, and waypoints.
         adj: An adjacency function returning cells adjacent to a given cell as well as their respective edge costs.
-
     Returns:
         If a path exits, return a list containing all cells from initial_position to destination.
         Otherwise, return None.
-
     """
-    # pass
-    queue = [(0,initial_position)]
-    while queue:
-        current_cost, current_node = best(queue)
+    # return the list of nodes using prev diction
+    queue = [(0, initial_position)]
+    while(queue):
+        current_cost, current_node = heappop(queue) 		# pop the least cost node
         if current_node == destination:
-            return path_to(destination,graph) # What is path_to?
+            result = 
+            while(prev[]!=None):
+                
+            return #path_to(goal, graph)
         else:
-            # generate successors
-            # for cost,node in adj(current_node,graph):
-            #     pathcost = cost + current_node.pathcost
+            for cost,node in navigation_edges(graph, initial_position)
             pathcost = cost + current_node.pathcost
-            if current_node == None:
-                current_node.pathcost = 0
-
             # if node is new, set pathcost, backpointer and insert in queue at pathcost
-            # else if pathcost is cheaper, update pathcost, backpointer, and requeue 
-            return 0
-        # return(Failure)				# can’t get there from here
-        
-
+            if node = 
 
 
 
@@ -45,52 +36,60 @@ def dijkstras_shortest_path(initial_position, destination, graph, adj):
 
 def dijkstras_shortest_path_to_all(initial_position, graph, adj):
     """ Calculates the minimum cost to every reachable cell in a graph from the initial_position.
-
     Args:
         initial_position: The initial cell from which the path extends.
         graph: A loaded level, containing walls, spaces, and waypoints.
         adj: An adjacency function returning cells adjacent to a given cell as well as their respective edge costs.
-
     Returns:
         A dictionary, mapping destination cells to the cost of a path from the initial_position.
     """
-    pass
+    # pass
+    # the dictionary is the cost
 
     
 
 
 def navigation_edges(level, cell):
     """ Provides a list of adjacent cells and their respective costs from the given cell.
-
     Args:
         level: A loaded level, containing walls, spaces, and waypoints.
         cell: A target location.
-
     Returns:
         A list of tuples containing an adjacent cell's coordinates and the cost of the edge joining it and the
         originating cell.
-
         E.g. from (0,0):
             [((0,1), 1),
              ((1,0), 1),
              ((1,1), 1.4142135623730951),
              ... ]
     """
-    pass
+
+    #loose use of https://stackoverflow.com/questions/1620940/determining-neighbours-of-cell-two-dimensional-list
+    adjacent = lambda x, y : [(x2, y2) for x2 in range(x-1, x+2)
+                               for y2 in range(y-1, y+2)
+                               if ((x != x2 or y != y2) and
+                               ((x2,y2) in level['spaces']))]
+
+    adjCells = adjacent(cell[0], cell[1])
+
+    adjFinal = []
+    for adjCell in adjCells:
+        pair = (adjCell, sqrt(abs(adjCell[0] - cell[0]) + abs(adjCell[1] - cell[1])) * 0.5 * (level['spaces'][adjCell] + level['spaces'][cell]))
+        adjFinal.append(pair)
+    
+    return adjFinal
 
 def test_route(filename, src_waypoint, dst_waypoint):
     """ Loads a level, searches for a path between the given waypoints, and displays the result.
-
     Args:
         filename: The name of the text file containing the level.
         src_waypoint: The character associated with the initial waypoint.
         dst_waypoint: The character associated with the destination waypoint.
-
     """
 
     # Load and display the level.
     level = load_level(filename)
-    show_level(level)
+    show_level(level,[(1,2),(2,2)])
 
     # Retrieve the source and destination coordinates from the level.
     src = level['waypoints'][src_waypoint]
@@ -107,12 +106,10 @@ def test_route(filename, src_waypoint, dst_waypoint):
 def cost_to_all_cells(filename, src_waypoint, output_filename):
     """ Loads a level, calculates the cost to all reachable cells from 
     src_waypoint, then saves the result in a csv file with name output_filename.
-
     Args:
         filename: The name of the text file containing the level.
         src_waypoint: The character associated with the initial waypoint.
         output_filename: The filename for the output csv file.
-
     """
     
     # Load and display the level.
