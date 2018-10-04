@@ -65,43 +65,21 @@ def navigation_edges(level, cell):
              ((1,1), 1.4142135623730951),
              ... ]
     """
-    adjFinal = []
-    """
-    adjCells.append((cell[0] - 1, cell[1] - 1))
-    adjCells.append((cell[0] - 1, cell[1]))
-    adjCells.append((cell[0] - 1, cell[1] + 1))
-    adjCells.append((cell[0], cell[1] + 1))
-    adjCells.append((cell[0] + 1, cell[1] + 1))
-    adjCells.append((cell[0] + 1, cell[1]))
-    adjCells.append((cell[0] + 1, cell[1] - 1))
-    adjCells.append((cell[0], cell[1] - 1))
-    """
 
     #loose use of https://stackoverflow.com/questions/1620940/determining-neighbours-of-cell-two-dimensional-list
-    neighbors = lambda x, y : [(x2, y2) for x2 in range(x-1, x+2)
+    adjacent = lambda x, y : [(x2, y2) for x2 in range(x-1, x+2)
                                for y2 in range(y-1, y+2)
                                if ((x != x2 or y != y2) and
                                ((x2,y2) in level['spaces']))]
 
-    adjCells = neighbors(cell[0], cell[1])
+    adjCells = adjacent(cell[0], cell[1])
 
-    print(adjCells)
-
-    prices = lambda list : [(adjCell, cost) for adjCell in list
-                                            for cost in range(int(level['spaces'][adjCell]),int(level['spaces'][adjCell]+1))]
-    adjTest = prices(adjCells)
-    print(adjTest)
-
-
+    adjFinal = []
     for adjCell in adjCells:
         pair = (adjCell, sqrt(abs(adjCell[0] - cell[0]) + abs(adjCell[1] - cell[1])) * 0.5 * (level['spaces'][adjCell] + level['spaces'][cell]))
-        #pair[0] = adjCell
-        #pair[1] = sqrt(abs(adjCell[0] - cell[0]) + abs(adjCell[1] - cell[1])) * 0.5 * (level['spaces'][adjCell] + level['spaces'][cell])
         adjFinal.append(pair)
-
-    print(adjFinal)
     
-    pass
+    return adjFinal
 
 def test_route(filename, src_waypoint, dst_waypoint):
     """ Loads a level, searches for a path between the given waypoints, and displays the result.
