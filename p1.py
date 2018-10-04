@@ -3,6 +3,14 @@ from math import inf, sqrt
 from heapq import heappop, heappush
 
 
+def path_to(start, end, prevList):
+    route = [end]
+    current = end
+    while(current != start):
+        route.insert(0, prevList[current])
+        current = prevList[current]
+    return route
+
 def dijkstras_shortest_path(initial_position, destination, graph, adj):
     """ Searches for a minimal cost path through a graph using Dijkstra's algorithm.
 
@@ -27,6 +35,29 @@ def dijkstras_shortest_path(initial_position, destination, graph, adj):
     #        return 0;
             # generate successors
     queue = [(0, initial_position)]
+    found = {}
+    previous = {}
+    while queue:
+        current_cost, current_node = heappop(queue)
+        if current_node == destination:
+            print('Got eem!')
+            return path_to(initial_position, destination, previous)
+        else:
+            for node, cost in adj(graph, current_node):
+                pathcost = cost + current_cost
+                if node in found and pathcost >= found[node]:
+                    continue
+                heappush(queue, (pathcost, node))
+                found[node] = pathcost
+                previous[node] = current_node
+    return(Failure)
+
+    print(queue)
+
+
+
+    print(current_node)
+    print(current_cost)
     adj(graph, initial_position)
 
             
@@ -81,6 +112,10 @@ def navigation_edges(level, cell):
     
     return adjFinal
 
+
+
+
+
 def test_route(filename, src_waypoint, dst_waypoint):
     """ Loads a level, searches for a path between the given waypoints, and displays the result.
 
@@ -93,7 +128,7 @@ def test_route(filename, src_waypoint, dst_waypoint):
 
     # Load and display the level.
     level = load_level(filename)
-    show_level(level,[(1,2),(2,2)])
+    show_level(level)
 
     # Retrieve the source and destination coordinates from the level.
     src = level['waypoints'][src_waypoint]
@@ -131,7 +166,7 @@ def cost_to_all_cells(filename, src_waypoint, output_filename):
 
 
 if __name__ == '__main__':
-    filename, src_waypoint, dst_waypoint = 'example.txt', 'a','e'
+    filename, src_waypoint, dst_waypoint = 'test_maze.txt', 'a','e'
 
     # Use this function call to find the route between two waypoints.
     test_route(filename, src_waypoint, dst_waypoint)
