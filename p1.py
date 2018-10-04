@@ -18,13 +18,17 @@ def dijkstras_shortest_path(initial_position, destination, graph, adj):
 
     """
     # pass
-    queue = [(0,start)]
-    while queue:
-        current_cost, current_node = best(queue)
-        if current_node == destination:
-            return path_to(destination,graph)
-        else:
+    #queue = [(0,initial_position)]
+    #while queue:
+    #    current_cost, current_node = best(queue)
+    #    if current_node == destination:
+    #        return path_to(destination,graph)
+    #    else:
+    #        return 0;
             # generate successors
+    queue = [(0, initial_position)]
+    adj(graph, initial_position)
+
             
 
 
@@ -39,8 +43,7 @@ def dijkstras_shortest_path_to_all(initial_position, graph, adj):
     Returns:
         A dictionary, mapping destination cells to the cost of a path from the initial_position.
     """
-    # pass
-    return 0
+    pass
 
     
 
@@ -62,8 +65,43 @@ def navigation_edges(level, cell):
              ((1,1), 1.4142135623730951),
              ... ]
     """
-    # pass
-    return 0;
+    adjFinal = []
+    """
+    adjCells.append((cell[0] - 1, cell[1] - 1))
+    adjCells.append((cell[0] - 1, cell[1]))
+    adjCells.append((cell[0] - 1, cell[1] + 1))
+    adjCells.append((cell[0], cell[1] + 1))
+    adjCells.append((cell[0] + 1, cell[1] + 1))
+    adjCells.append((cell[0] + 1, cell[1]))
+    adjCells.append((cell[0] + 1, cell[1] - 1))
+    adjCells.append((cell[0], cell[1] - 1))
+    """
+
+    #loose use of https://stackoverflow.com/questions/1620940/determining-neighbours-of-cell-two-dimensional-list
+    neighbors = lambda x, y : [(x2, y2) for x2 in range(x-1, x+2)
+                               for y2 in range(y-1, y+2)
+                               if ((x != x2 or y != y2) and
+                               ((x2,y2) in level['spaces']))]
+
+    adjCells = neighbors(cell[0], cell[1])
+
+    print(adjCells)
+
+    prices = lambda list : [(adjCell, cost) for adjCell in list
+                                            for cost in range(int(level['spaces'][adjCell]),int(level['spaces'][adjCell]+1))]
+    adjTest = prices(adjCells)
+    print(adjTest)
+
+
+    for adjCell in adjCells:
+        pair = (adjCell, sqrt(abs(adjCell[0] - cell[0]) + abs(adjCell[1] - cell[1])) * 0.5 * (level['spaces'][adjCell] + level['spaces'][cell]))
+        #pair[0] = adjCell
+        #pair[1] = sqrt(abs(adjCell[0] - cell[0]) + abs(adjCell[1] - cell[1])) * 0.5 * (level['spaces'][adjCell] + level['spaces'][cell])
+        adjFinal.append(pair)
+
+    print(adjFinal)
+    
+    pass
 
 def test_route(filename, src_waypoint, dst_waypoint):
     """ Loads a level, searches for a path between the given waypoints, and displays the result.
@@ -77,7 +115,7 @@ def test_route(filename, src_waypoint, dst_waypoint):
 
     # Load and display the level.
     level = load_level(filename)
-    show_level(level)
+    show_level(level,[(1,2),(2,2)])
 
     # Retrieve the source and destination coordinates from the level.
     src = level['waypoints'][src_waypoint]
