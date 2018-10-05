@@ -77,14 +77,8 @@ def dijkstras_shortest_path(initial_position, destination, graph, adj):
                 heappush(queue, (pathcost, node))
                 found[node] = pathcost
                 previous[node] = current_node
-    return(Failure)
+    pass
 
-    print(queue)
-
-
-
-    print(current_node)
-    print(current_cost)
     adj(graph, initial_position)
 
 
@@ -198,6 +192,7 @@ def test_route(filename, src_waypoint, dst_waypoint, output_filename):
     dst = level['waypoints'][dst_waypoint]
 
     # Search for and display the path from src to dst.
+    #haphazardly edited to output to file aswell as stdout
     path = dijkstras_shortest_path(src, dst, level, navigation_edges)
     if path:
         show_level(level, path)
