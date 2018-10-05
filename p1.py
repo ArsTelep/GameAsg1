@@ -6,13 +6,13 @@ zarlawre@ucsc.edu
 1493604
 
 Hui Huang
-hhuang66@ucsc.edu   
+hhuang66@ucsc.edu  
 1596750
 """
 
 
 
-
+import sys
 from p1_support import load_level, show_level, save_level_costs
 from math import inf, sqrt
 from heapq import heappop, heappush
@@ -179,7 +179,7 @@ def navigation_edges(level, cell):
 
 
 
-def test_route(filename, src_waypoint, dst_waypoint):
+def test_route(filename, src_waypoint, dst_waypoint, output_filename):
     """ Loads a level, searches for a path between the given waypoints, and displays the result.
 
     Args:
@@ -201,6 +201,14 @@ def test_route(filename, src_waypoint, dst_waypoint):
     path = dijkstras_shortest_path(src, dst, level, navigation_edges)
     if path:
         show_level(level, path)
+        original_out = sys.stdout
+        f = open(output_filename, "w+")
+        sys.stdout = f
+        show_level(level, path)
+        sys.stdout = original_out
+        f.close
+        print("Saved file:", output_filename)
+
     else:
         print("No path possible!")
 
@@ -218,7 +226,7 @@ def cost_to_all_cells(filename, src_waypoint, output_filename):
     
     # Load and display the level.
     level = load_level(filename)
-    show_level(level)
+    #show_level(level)
 
     # Retrieve the source coordinates from the level.
     src = level['waypoints'][src_waypoint]
@@ -229,10 +237,10 @@ def cost_to_all_cells(filename, src_waypoint, output_filename):
 
 
 if __name__ == '__main__':
-    filename, src_waypoint, dst_waypoint = 'example.txt', 'a','e'
+    filename, src_waypoint, dst_waypoint = 'test_maze.txt', 'a','d'
 
     # Use this function call to find the route between two waypoints.
-    test_route(filename, src_waypoint, dst_waypoint)
+    test_route(filename, src_waypoint, dst_waypoint, 'test_maze_path.txt')
 
     # Use this function to calculate the cost to all reachable cells from an origin point.
-    cost_to_all_cells(filename, src_waypoint, 'my_costs.csv')
+    cost_to_all_cells(filename, src_waypoint, 'test_maze_costs.csv')
