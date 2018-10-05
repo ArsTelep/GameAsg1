@@ -1,15 +1,46 @@
+"""
+PROGRAM 1 CODED BY:
+
+Zack Lawrence
+zarlawre@ucsc.edu
+1493604
+
+Hui Huang
+hhuang66@ucsc.edu   
+1596750
+"""
+
+
+
+
 from p1_support import load_level, show_level, save_level_costs
 from math import inf, sqrt
 from heapq import heappop, heappush
 
 
+
+
 def path_to(start, end, prevList):
+    #CREATED BY STUDENT
+    """Begins at destination and parses through each previous cell, adding each to a list until it reaches the starting point
+
+    Args: 
+        start: initial position
+        end: destination
+        prevList: A dictionary of found cells and their previous cells
+    """
+    #go through each previous cell and save it to first entry of list "route"
     route = [end]
     current = end
     while(current != start):
         route.insert(0, prevList[current])
         current = prevList[current]
     return route
+
+
+
+
+
 
 def dijkstras_shortest_path(initial_position, destination, graph, adj):
     """ Searches for a minimal cost path through a graph using Dijkstra's algorithm.
@@ -25,22 +56,18 @@ def dijkstras_shortest_path(initial_position, destination, graph, adj):
         Otherwise, return None.
 
     """
-    # pass
-    #queue = [(0,initial_position)]
-    #while queue:
-    #    current_cost, current_node = best(queue)
-    #    if current_node == destination:
-    #        return path_to(destination,graph)
-    #    else:
-    #        return 0;
-            # generate successors
+
+
+    #declare dictionaries and priority queue
     queue = [(0, initial_position)]
-    found = {}
+    found = {initial_position: 0}    
     previous = {}
+
+    #loop through queue
     while queue:
         current_cost, current_node = heappop(queue)
         if current_node == destination:
-            print('Got eem!')
+            #print('Got eem!')
             return path_to(initial_position, destination, previous)
         else:
             for node, cost in adj(graph, current_node):
@@ -60,7 +87,9 @@ def dijkstras_shortest_path(initial_position, destination, graph, adj):
     print(current_cost)
     adj(graph, initial_position)
 
-            
+
+
+
 
 
 def dijkstras_shortest_path_to_all(initial_position, graph, adj):
@@ -74,9 +103,41 @@ def dijkstras_shortest_path_to_all(initial_position, graph, adj):
     Returns:
         A dictionary, mapping destination cells to the cost of a path from the initial_position.
     """
-    pass
+    #I'm sure there's probably a more efficient way to do this, but it's Thursday and this'll do.
 
-    
+    #iterate through all cells until every cell that can be found is found with its lowest possible cost
+    queue = [(0, initial_position)]
+    found = {initial_position: 0}
+    while queue:
+        current_cost, current_node = heappop(queue)
+        for node, cost in adj(graph, current_node):
+            pathcost = cost + current_cost
+            if node in found and pathcost >= found[node]:
+                continue
+            heappush(queue, (pathcost, node))
+            found[node] = pathcost
+
+
+    #iterate through every position in graph and add it and its cost to final dictionary
+    final = {}
+    i = 0
+    k = 0
+    while (i,k) in graph['spaces'] or (i,k) in graph['walls']:
+        while (i,k) in graph['spaces'] or (i,k) in graph['walls']:
+            if (i,k) in found:
+                final[i,k] = found[i,k]
+            else:
+                final[i,k] = inf
+            i += 1
+        k += 1
+        i = 0
+
+    return final
+
+
+
+
+
 
 
 def navigation_edges(level, cell):
@@ -103,8 +164,10 @@ def navigation_edges(level, cell):
                                if ((x != x2 or y != y2) and
                                ((x2,y2) in level['spaces']))]
 
+    #create a list of reachable adjacent cells
     adjCells = adjacent(cell[0], cell[1])
 
+    #pair adjacent cells with their costs in tuples, then create a list of those tuples
     adjFinal = []
     for adjCell in adjCells:
         pair = (adjCell, sqrt(abs(adjCell[0] - cell[0]) + abs(adjCell[1] - cell[1])) * 0.5 * (level['spaces'][adjCell] + level['spaces'][cell]))
@@ -166,7 +229,7 @@ def cost_to_all_cells(filename, src_waypoint, output_filename):
 
 
 if __name__ == '__main__':
-    filename, src_waypoint, dst_waypoint = 'test_maze.txt', 'a','e'
+    filename, src_waypoint, dst_waypoint = 'example.txt', 'a','e'
 
     # Use this function call to find the route between two waypoints.
     test_route(filename, src_waypoint, dst_waypoint)
